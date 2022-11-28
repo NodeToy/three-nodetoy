@@ -1,0 +1,52 @@
+.header {
+    background: #f0f0f000;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    color: #fdcdff;
+    font-family: monospace;
+    font-size: 18px;
+}
+
+.container {
+    background: #f0f0f0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.colorPicker {
+    display: inline-block;
+    margin: 0 10px
+}
+
+.info {
+    line-height: 24px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.info a {
+    color: rgb(253, 132, 233);
+}
+
+.colorPickers {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.colorPicker {
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+}

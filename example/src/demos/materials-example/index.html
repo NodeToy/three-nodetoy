@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>three-nodetoy</title>
+    <style>
+			body {
+        color: #fdcdff;
+				/* background: #333333; */
+        font-family: monospace;
+        font-size: 18px;
+	      line-height: 24px;
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+			}
+			a {
+				color: rgb(253, 132, 233);
+			}
+			.colorPicker {
+				display: inline-block;
+				margin: 0 10px
+			}
+
+      .info {
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      .colorPickers {
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+		</style>
+  </head>
+  <body>
+    <div class="info">
+      Ferrari 458 Italia model by <a href="https://sketchfab.com/models/57bf6cc56931426e87494f554df1dab6" target="_blank" rel="noopener">vicent091036</a>
+		</div>
+    <div class="colorPickers">
+			<span class="colorPicker"><input id="body-color" type="color" value="#ff000d" /><br/>Body</span>
+      <span class="colorPicker"><input id="rim-color" type="color" value="#9900ff" /><br/>Rim</span>
+			<span class="colorPicker"><input id="details-color" type="color" value="#04ff00" /><br/>Details</span>
+		</div>
+    <div id="root"></div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
