@@ -292,14 +292,19 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 
 		//const env = new THREE.DataTexture();
 		if (scene.environment && this._type !== NodeToyMaterialType.Unlit) {
-			
-			const env = scene.environment.clone();
-			env.mapping = THREE.CubeUVReflectionMapping;
-			(this as any).envMap = env;
-			(this as any).envMap.mapping = THREE.CubeUVReflectionMapping; // Forcing this type to be able to work with ShaderMaterial
-			(this as any).envMapMode = CubeUVReflectionMapping;
-			(this as any).uniforms.envMap.value = env;
-			(this as any).uniforms.envMapIntensity.value = (this as any).envMapIntensity;
+
+			// environment has changed
+			if (this._envUUID != scene.environment.uuid) {
+				this._envUUID = scene.environment.uuid;
+					
+				const env = scene.environment.clone();
+				env.mapping = THREE.CubeUVReflectionMapping;
+				(this as any).envMap = env;
+				(this as any).envMap.mapping = THREE.CubeUVReflectionMapping; // Forcing this type to be able to work with ShaderMaterial
+				(this as any).envMapMode = CubeUVReflectionMapping;
+				(this as any).uniforms.envMap.value = env;
+				(this as any).uniforms.envMapIntensity.value = (this as any).envMapIntensity;
+			}
 
 			(this as any).defines = {
 				STANDARD: '',
@@ -381,6 +386,7 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 	private _type: NodeToyMaterialType = NodeToyMaterialType.Unlit;
 
 	private _options: any = {};
+	private _envUUID = null;
 
 	private static _time = { time: 0, deltaTime: 0};
 	private static _clock = new THREE.Clock();

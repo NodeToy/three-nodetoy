@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { NodeToyMaterial, NodeToyCullMode } from '@nodetoy/three-nodetoy'
+import { NodeToyMaterial, NodeToyCullMode } from '@nodetoy/three-nodetoy';
 
 const geometry = new THREE.SphereGeometry(1, 128, 128);
 geometry.computeTangents(); // NEEDED if there is a normal map otherwise the normals will not be affected

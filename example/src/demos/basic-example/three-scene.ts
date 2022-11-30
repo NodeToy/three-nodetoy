@@ -37,6 +37,9 @@ export const setupScene = (container : HTMLElement) : ()=>void => {
   const light = new THREE.AmbientLight( 0x404040 ); // soft white light
   scene.add( light );
 
+  // const dirLight = new THREE.DirectionalLight( 0x404040 ); // soft white light
+  // scene.add( dirLight );
+
   // Add App to scene
   scene.add(App);
 

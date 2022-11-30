@@ -112,6 +112,7 @@ loader.load( '/scene.gltf', function ( object ) {
     glbMesh.getObjectByName( 'Crystal_3' ).material = gems;
 
     glbMesh.getObjectByName( 'Cube_2' ).material = terrain;
+    //glbMesh.getObjectByName( 'Cube_2' ).geometry.computeTangents(); // Needed if the material has a normal map
     glbMesh.getObjectByName( 'Cube002' ).material = terrain;
     glbMesh.getObjectByName( 'Cube006').material = terrain;
     glbMesh.getObjectByName( 'Cube007').material = terrain;
