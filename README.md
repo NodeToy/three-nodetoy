@@ -8,6 +8,10 @@ three-nodetoy allows you to export and use NodeToy graphs directly in your three
 [Website](https://nodetoy.co/) &mdash;
 [Twitter](https://twitter.com/nodetoy) &mdash;
 
+## Demos
+
+[https://three-nodetoy.vercel.app/](https://three-nodetoy.vercel.app/)
+
 ## Example
 
 ```tsx
