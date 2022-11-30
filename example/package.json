@@ -21,7 +21,7 @@
     "use-error-boundary": "^2.0.6",
     "wouter": "^2.8.0-alpha.2",
     "zustand": "^3.7.1",
-    "@nodetoy/three-nodetoy": "link:../../three-nodetoy"
+    "@nodetoy/three-nodetoy": "link:../"
   },
   "devDependencies": {
     "@types/react": "^17.0.43",

@@ -1,6 +1,6 @@
 {
   "name": "@nodetoy/three-nodetoy",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "files": [
     "dist"
   ],
@@ -18,7 +18,7 @@
     "dev": "tsc && vite build --watch",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "deploy": "yarn build && np"
+    "deploy": "yarn build && npm publish"
   },
   "devDependencies": {
     "@types/node": "^16.11.9",
@@ -37,6 +37,7 @@
     "three": ">=0.143.0"
   },
   "dependencies": {
-    "@nodetoy/shared-nodetoy": "*"
+    "three": ">=0.143.0",
+    "@nodetoy/shared-nodetoy": "^0.2.0"
   }
 }

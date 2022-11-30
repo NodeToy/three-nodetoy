@@ -397,9 +397,12 @@
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.14.54.tgz#de2a4be678bd4d0d1ffbb86e6de779cde5999028"
   integrity sha512-bZBrLAIX1kpWelV0XemxBZllyRmM6vgFQQG2GdNb+r3Fkp0FOh1NJSvekXDs7jq70k4euu1cryLMfU+mTXlEpw==
 
-"@nodetoy/runtime@link:../../runtime":
-  version "0.0.0"
-  uid ""
+"@nodetoy/shared-nodetoy@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@nodetoy/shared-nodetoy/-/shared-nodetoy-0.2.0.tgz#1a2c48ad6563df7585cb1e3dfc80224260c8f5e3"
+  integrity sha512-b4xciwBrFXv+Xa9teH7SME0jdGRoOqTVP98UHgxFJuOinzrCQRctt+amMzobvR+PP8k+2h4Y/be8RewCWB+stg==
+  dependencies:
+    eventemitter3 "^4.0.7"
 
 "@nodetoy/three-nodetoy@link:..":
   version "0.0.0"

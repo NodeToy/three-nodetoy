@@ -6,7 +6,14 @@ export default defineConfig({
     port: 3001,
   },
   optimizeDeps: {
-    exclude: ['@react-three/fiber'],
+    exclude: ['@nodetoy/three-nodetoy', 'three'],
   },
   plugins: [reactRefresh()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    }
+  }
 })
