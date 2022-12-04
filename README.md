@@ -108,7 +108,7 @@ Set the intensity of the environment map. Default is 1.0.
 We use [yarn](https://yarnpkg.com/), install the dependencies like this:
 
 ```bash
-yarn install
+yarn
 ```
 
 ### Development
@@ -128,7 +128,7 @@ cd ..
 yarn demo
 ```
 
-and visit `localhost:3003/demo/Basic` to browse the examples in `./example` folder.
+and visit `localhost:3001/demo/Basic` to browse the examples in `./example` folder.
 
 ### Build Library
 

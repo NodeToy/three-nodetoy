@@ -114,7 +114,7 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 		};
 
 		(this as any).uniforms = deepCopy(THREE.ShaderLib.physical.uniforms);
-		(this as any).uniforms.spotShadowMatrix = { value: [] };
+		(this as any).uniforms.spotShadowMatrix = { value: [new THREE.Matrix4()] };
         (this as any).lights = true;
         (this as any).isShaderMaterial = true;
       	(this as any).isMeshStandardMaterial = false;
