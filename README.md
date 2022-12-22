@@ -7,6 +7,43 @@ three-nodetoy allows you to export and use NodeToy graphs directly in your three
 
 [Website](https://nodetoy.co/) &mdash;
 [Twitter](https://twitter.com/nodetoy) &mdash;
+[Discord](https://discord.gg/9ZbGRgZWeV) &mdash;
+
+⚛️ Using React-Three-Fiber instead? Use [React-NodeToy](https://github.com/NodeToy/react-nodetoy).
+
+## Compatibility
+
+Requires `threejs >= 0.143.0`
+
+Older threejs versions might be supported but are untested.
+
+## Install
+
+With npm:
+```sh
+npm i @nodetoy/three-nodetoy
+```
+
+With yarn:
+```sh
+yarm add @nodetoy/three-nodetoy
+```
+
+Import `three-nodetoy` in your project:
+```tsx
+import { NodeToyMaterial } from '@nodetoy/three-nodetoy';
+```
+
+Declare your material:
+```tsx
+let material =  new NodeToyMaterial({ url: "https://draft.nodetoy.co/nFvoIaHuvkvm3uMa" });
+```
+
+If your materials are dynamic (use of Time, CosTime, SinTime, ...) add `NodeToyMaterial.tick()` to your render loop. See section `"Update Time / Dynamic uniforms"` for more information.
+
+```tsx
+NodeToyMaterial.tick();
+```
 
 ## Demos
 
@@ -14,6 +51,7 @@ three-nodetoy allows you to export and use NodeToy graphs directly in your three
 
 ## Example
 
+Simple example:
 ```tsx
 
 import * as THREE from "three";
@@ -26,6 +64,26 @@ let mesh = new THREE.Mesh(geometry, material);
 mesh.position.x = 2;
 scene.add(mesh);
 ```
+
+# Update Time / Dynamic uniforms
+
+Some nodes require uniforms to be updated every frame.
+For this reason you should call `NodeToyMaterial.tick()` in your render loop.
+
+```tsx
+// Animate
+function animate() {
+  requestAnimationFrame(animate);
+  mesh.rotation.x += 0.01;
+  mesh.rotation.y += 0.01;
+  renderer.render(scene, camera);
+
+  // Necessary to update dynamic uniforms such as time
+  NodeToyMaterial.tick();
+}
+animate();
+```
+
 
 ## API
 
