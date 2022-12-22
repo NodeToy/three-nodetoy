@@ -11,6 +11,11 @@ three-nodetoy allows you to export and use NodeToy graphs directly in your three
 
 ⚛️ Using React-Three-Fiber instead? Use [React-NodeToy](https://github.com/NodeToy/react-nodetoy).
 
+## Demos
+
+[https://three-nodetoy.vercel.app/](https://three-nodetoy.vercel.app/)
+
+
 ## Compatibility
 
 Requires `threejs >= 0.143.0`
@@ -44,10 +49,6 @@ If your materials are dynamic (use of Time, CosTime, SinTime, ...) add `NodeToyM
 ```tsx
 NodeToyMaterial.tick();
 ```
-
-## Demos
-
-[https://three-nodetoy.vercel.app/](https://three-nodetoy.vercel.app/)
 
 ## Example
 
