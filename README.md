@@ -85,6 +85,21 @@ function animate() {
 animate();
 ```
 
+## Server-hosted VS. Self-hosted
+
+NodeToy gives you the choice between either hosting the shader data for you or loading it your way.
+You can choose the type of exporting in the exporter window (`Editor > Main menu > Export...`).
+
+To load a `server-hosted` shader use the `url` parameter.
+```tsx
+let material =  new NodeToyMaterial({ url: "https://draft.nodetoy.co/nFvoIaHuvkvm3uMa" });
+```
+
+To load a `self-hosted` shader use the `data` parameter.
+```tsx
+import { data } from './shaderData'
+let material =  new NodeToyMaterial({ data });
+```
 
 ## API
 
@@ -95,8 +110,19 @@ enum NodeToyCullMode {
   None,
 };
 
+export interface NodeToyMaterialData {
+	version: number;
+  uniforms: any[];
+  vertex: string;
+  fragment: string;
+  cullMode: NodeToyCullMode;
+  lightModel: NodeToyMaterialType;
+  renderType: NodeToyRenderType;
+};
+
 interface NodeToyMaterialOptions {
-  url: string;
+  url?: string;
+  data?: NodeToyMaterialData;
   parameters?: any;
   toneMapped?: boolean;
   flatShading?: boolean;
@@ -113,15 +139,19 @@ interface NodeToyMaterialOptions {
 const material = new NodeToyMaterial(options: NodeToyMaterialOptions);
 ```
 
-#### url : `string`
+#### url? : `string`
 
-Define the NodeToy material to load. To export a material, open up the NodeToy material, click on the menu icon (top left corner) and select `Export Project...`. You can then generate a draft for your material, the URL will be generated for you.
+Define the NodeToy material to load. To export a material, open up the NodeToy material, click on the menu icon (top left corner) and select `Export...`. You can then generate a draft for your material, the URL will be generated for you.
+
+#### data? : `NodeToyMaterialData`
+
+Define the NodeToy material data to load from a self hosted source. To export a material, open up the NodeToy material, click on the menu icon (top left corner) and select `Export...`. Select `Self Hosted` and `Copy Shader Data`. Use the copied data to set this field.
 
 #### parameters? : `Object`
 
 Specifying the uniforms to be passed to the shader code. Those can be defined within the NodeToy editor by swiching inputs from `constants` to `parameters`.
 
-#### toneMapped : `Boolean`
+#### toneMapped? : `Boolean`
 
 Defines whether this material is tone mapped according to the renderer's toneMapping setting. Default is true.
 

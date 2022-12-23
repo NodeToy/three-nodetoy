@@ -5,6 +5,7 @@ import {
 	initThree,
 	deepCopy,
 	diff,
+	RendererDOM,
 } from '@nodetoy/shared-nodetoy';
 
 initThree();
@@ -15,24 +16,36 @@ const graphLoader = new GraphLoader();
 export const CubeUVReflectionMapping = 306;
 
 export enum NodeToyCullMode {
-	Front,
-	Back,
-	None,
-}
+	Front = "front",
+	Back = "back",
+	None = "none",
+};
 
 export enum NodeToyMaterialType {
 	Standard = 'standard',
 	Physical = 'physical',
 	Unlit = 'unlit',
-}
+	Image = 'image',
+};
 
 export enum NodeToyRenderType {
 	Opaque = 'opaque',
 	Transparent = 'transparent',
-}
+};
+
+export interface NodeToyMaterialData {
+	version: number;
+    uniforms: any[];
+    vertex: string;
+    fragment: string;
+    cullMode: NodeToyCullMode;
+    lightModel: NodeToyMaterialType;
+    renderType: NodeToyRenderType;
+};
 
 export interface NodeToyMaterialOptions {
-	url: string;
+	url?: string;
+	data?: NodeToyMaterialData;
 	parameters?: any;
 	toneMapped?: boolean;
 	flatShading?: boolean;
@@ -44,7 +57,7 @@ export interface NodeToyMaterialOptions {
 	depthTest?: boolean;
     depthWrite?: boolean;
 	envMapIntensity?: number;
-}
+};
 
 
 class NodeToyMaterial extends THREE.ShaderMaterial {
@@ -89,23 +102,7 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 
 		(this as any).vertexShader = THREE.ShaderLib.standard.vertexShader;
 		(this as any).fragmentShader = THREE.ShaderLib.standard.fragmentShader;
-
-		if (options) {
-			"verbose" in options && (this.verbose = options.verbose!);
-			"url" in options && (this.url = options.url);
-			"toneMapped" in options && ((this as any).toneMapped = options.toneMapped);
-			"flatShading" in options && ((this as any).flatShading = options.flatShading);
-			"transparent" in options && ((this as any).transparent = options.transparent);
-			"cullMode" in options && (this.cullMode = options.cullMode);
-			this._parameters = options.parameters? options.parameters : null;
-			"polygonOffset" in options && ((this as any).polygonOffset = options.polygonOffset);
-			"polygonOffsetFactor" in options && ((this as any).polygonOffsetFactor = options.polygonOffsetFactor);
-			"depthTest" in options && ((this as any).depthTest = options.depthTest);
-			"depthWrite" in options && ((this as any).depthWrite = options.depthWrite);
-			"envMapIntensity" in options && ((this as any).envMapIntensity = options.envMapIntensity);
-			this._options = options;
-		}
-
+		
 		(this as any).defines = {
 			STANDARD: '',
 			USE_NORMALMAP: '',
@@ -120,6 +117,23 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
       	(this as any).isMeshStandardMaterial = false;
         (this as any).type = 'ShaderMaterial';
 		(this as any).combine = THREE.MultiplyOperation;
+
+		if (options) {
+			"verbose" in options && (this.verbose = options.verbose!);
+			"url" in options && (this.url = options.url);
+			"toneMapped" in options && ((this as any).toneMapped = options.toneMapped);
+			"flatShading" in options && ((this as any).flatShading = options.flatShading);
+			"transparent" in options && ((this as any).transparent = options.transparent);
+			"cullMode" in options && (this.cullMode = options.cullMode);
+			this._parameters = options.parameters? options.parameters : null;
+			"polygonOffset" in options && ((this as any).polygonOffset = options.polygonOffset);
+			"polygonOffsetFactor" in options && ((this as any).polygonOffsetFactor = options.polygonOffsetFactor);
+			"depthTest" in options && ((this as any).depthTest = options.depthTest);
+			"depthWrite" in options && ((this as any).depthWrite = options.depthWrite);
+			"envMapIntensity" in options && ((this as any).envMapIntensity = options.envMapIntensity);
+			"data" in options && (this.data = options.data);
+			this._options = options;
+		}
 
 		// Emit load request when graph url changes 
 		graphLoader.events.on('load', (obj: any)=>{
@@ -140,7 +154,7 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
         (this as any).side = this.getTHREECullMode(value);
     }
 
-    public refreshShader() {
+    public recompile() {
         (this as any).version++;
         (this as any).dispose();
     }
@@ -152,6 +166,7 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 	public copy(source: NodeToyMaterial): this {
 		super.copy(source as any);
 		this._url = source._url;
+		this._data = source._data;
 		this.verbose = source.verbose;
 		this._parameters && (this._parameters = {...source._parameters});
 		
@@ -159,8 +174,7 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 		(this as any).fragmentShader = (source as any).fragmentShader;
 		(this as any).uniforms = deepCopy((source as any).uniforms);
 
-		this._data = (source as any)._data;
-		this.refreshShader();
+		this.recompile();
 
 		return this;
 	}
@@ -168,7 +182,7 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 
 
 	// -------------------------
-	// LOAD
+	// LOAD FROM URL
 
 	// NOTE: previously named 'graph'
 	public get url() {
@@ -188,14 +202,42 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 			if (url in graphLoader.cache) {
 				this.loadShader(graphLoader.cache[url]);
 			}
-
-			// send load request
-			graphLoader.load(url);
+			else {
+				// send load request
+				graphLoader.load(url);
+			}
 		}
 		else {
 			console.warn(`[NodeToy] Missing material graph URL. Cannot load shader.`)
 		}
 	}
+
+
+
+
+	// -------------------------
+	// LOAD FROM DATA
+
+	public get data() {
+		return this._data;
+	} 
+	public set data(value) {
+		if (!value) {
+			console.warn(`[NodeToy] Missing material graph data. Cannot load shader.`);
+			return;
+		}
+		if (this.verbose) {
+			console.log(`[NodeToy] seting graph data... | data:`, value);
+		}
+
+		this.loadShader(value);
+	}
+
+
+
+	
+	// -------------------------
+	// UNIFORMS / PARAMETERS
 
 	public get parameters() { return this._parameters; }
 	public set parameters(value) {
@@ -221,15 +263,6 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 	// ---------------
 	// PRIVATE
 
-	private fromStringToEnumCullMode(mode : string){
-		if (mode === "back"){
-			return NodeToyCullMode.Back;
-		}else if(mode === "front"){
-			return NodeToyCullMode.Front;
-		}
-		return NodeToyCullMode.None;
-	}
-
 	private updateUniforms(dataUniforms: any) {
 		let uniforms : any = [] // Changes to array will not change dataUniforms
 		Object.assign(uniforms, dataUniforms) // Object.assign(target, source)
@@ -247,7 +280,7 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 	}
 
 	// load the shader from the network data received
-	private loadShader(data: any) {
+	private loadShader(data: NodeToyMaterialData) {
 		if (this.verbose) {
 			console.log(`[NodeToy] graph loaded.`, data, generateUniforms(this.url, (this as any).uniforms, data.uniforms));
 		}
@@ -261,16 +294,16 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 		// Get the updated uniforms if any
 		const updatedUniforms = this.updateUniforms(data.uniforms);
 		(this as any).uniforms = generateUniforms(this.url, (this as any).uniforms, updatedUniforms);
-		(this as any).refreshShader();
+		(this as any).recompile();
 
 		if ("cullMode" in data && !("cullMode" in this._options)) {
-			this.cullMode = this.fromStringToEnumCullMode(data.cullMode);
+			this.cullMode = data.cullMode;
 		}
 		if ("lightModel" in data) {
 			this._type = data.lightModel;
 		}
 		if ("renderType" in data) {
-			this.transparent = data.renderType === NodeToyRenderType.Transparent;
+			(this as any).transparent = data.renderType === NodeToyRenderType.Transparent;
 		}
 	}
 
@@ -287,9 +320,16 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 			time: NodeToyMaterial._time.time,
 			deltaTime: NodeToyMaterial._time.deltaTime,
 		};
+
+		// TODO: add event when renderer is disposed to remove dom event
+		if (!renderer._rendererDOM) {
+			renderer._rendererDOM = new RendererDOM(renderer);
+		}
+
 		if ((this as any).uniforms) {
 			materialUpdate(frame, (this as any).uniforms);
 		}
+
 
 		//const env = new THREE.DataTexture();
 		if (scene.environment && this._type !== NodeToyMaterialType.Unlit) {
@@ -300,12 +340,13 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 					
 				const env = scene.environment.clone();
 				env.mapping = THREE.CubeUVReflectionMapping;
+
 				(this as any).envMap = env;
 				(this as any).envMap.mapping = THREE.CubeUVReflectionMapping; // Forcing this type to be able to work with ShaderMaterial
 				(this as any).envMapMode = CubeUVReflectionMapping;
 				(this as any).uniforms.envMap.value = env;
 				(this as any).uniforms.envMapIntensity.value = (this as any).envMapIntensity;
-			}
+			}	
 
 			(this as any).defines = {
 				STANDARD: '',
@@ -363,6 +404,9 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 		}
 	}
 
+
+
+	
 	// ---------------
 	// PRIVATE
 	
@@ -375,6 +419,16 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 		}
 		return THREE.FrontSide;
 	}
+
+
+	// ---------------
+	// PRIVATE STATIC
+
+	private static _bindDOMEvents = ()=>{
+      
+	}
+
+
 
 	// ---------------
 	// INTERNAL DATA
@@ -396,3 +450,14 @@ class NodeToyMaterial extends THREE.ShaderMaterial {
 export { 
 	NodeToyMaterial
 };
+
+
+
+
+
+
+
+
+
+
+
