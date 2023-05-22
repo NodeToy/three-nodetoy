@@ -561,9 +561,12 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nodetoy/shared-nodetoy@link:../shared-nodetoy":
-  version "0.0.0"
-  uid ""
+"@nodetoy/shared-nodetoy@^0.2.21":
+  version "0.2.21"
+  resolved "https://registry.yarnpkg.com/@nodetoy/shared-nodetoy/-/shared-nodetoy-0.2.21.tgz#ea66973464e9b66da0e247ff9708d25689dae845"
+  integrity sha512-itFQATEfWmbuYSBCHdVw6qY1mPME4JQ4jFEtbspgI+Dk7if4f7WXuNit2wFgLFUXPQ7c1UPUXZsJTBxVFDs6SA==
+  dependencies:
+    eventemitter3 "^4.0.7"
 
 "@rollup/pluginutils@^4.1.1":
   version "4.1.1"

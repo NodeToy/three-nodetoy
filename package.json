@@ -1,6 +1,6 @@
 {
   "name": "@nodetoy/three-nodetoy",
-  "version": "0.1.35",
+  "version": "0.1.36",
   "files": [
     "dist"
   ],
@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "three": ">=0.143.0",
-    "@nodetoy/shared-nodetoy": "^0.2.2"
+    "@nodetoy/shared-nodetoy": "^0.2.21"
   }
 }
