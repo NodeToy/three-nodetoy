@@ -1,9 +1,10 @@
 {
   "name": "@nodetoy/three-nodetoy",
-  "version": "0.1.36",
+  "version": "1.0.0",
   "files": [
     "dist"
   ],
+  "type": "module",
   "types": "./dist/NodeToy.d.ts",
   "main": "./dist/three-nodetoy.umd.js",
   "module": "./dist/three-nodetoy.es.js",
